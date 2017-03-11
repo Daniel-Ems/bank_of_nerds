@@ -62,7 +62,7 @@ class Customer:
         """ formated, appended to a list, and the list is then returned """
         """ to the teller """
         accountList = []
-        accountView = "{0} : {1} ${2:.2f}"
+        accountView = "\t{0} : {1} ${2:.2f}"
         for product, accounts in self.accounts.items():
             accountList.append(accountView.format(product, accounts.product,
                                                   accounts.balance))
@@ -71,7 +71,7 @@ class Customer:
     def __str__(self):
         """ The foramt strings prints all of the custoers relevant """
         """ bank information """
-        userView = "Customer#{0}  Name: {1} Age: {2}  Accounts: {3}"
+        userView = "\tCustomer#{0}\tName:{1}\tAge:{2}\tAccounts:{3}"
         return userView.format(self.id, self.name, self.age, self.numAccounts)
 
 
@@ -243,7 +243,7 @@ class Teller:
         if self.currCustomer.currAccount.product == "Retirement" and\
                                                     self.currCustomer.age < 67:
             os.system("clear")
-            print("You are not old enough to pull from your retirement")
+            print("\tYou are not old enough to pull from your retirement")
             self.accountActions()
         withdraw = self.valueValidation("How much would"
                                         " you like to withdraw? ", float)
@@ -260,6 +260,7 @@ class Teller:
 
     def listAccounts(self):
         """ listAccounts wraps the customers listAccounts method """
+        print(self.currCustomer.__str__())
         accountList = self.currCustomer.listAccounts()
         for account in accountList:
             print(account)
