@@ -3,6 +3,7 @@ import os
 import time
 import sys
 
+
 class Account:
     """ The account class contains the methods of depositing or """
     """ withdrawing.  It stores a float and a product label """
@@ -10,8 +11,9 @@ class Account:
     def __init__(self, product):
         self.balance = 0.00
         self.product = product
-    #withdraw and deposit are stored with the account because the accoount
-    #possess the items being deposited and withdrawn
+    # withdraw and deposit are stored with the account because the accoount
+    # possess the items being deposited and withdrawn
+
     def withdraw(self, withdraw):
         self.balance = self.balance-withdraw
 
@@ -29,12 +31,12 @@ class Customer:
         self.name = name
         self.age = age
         self.id = idnum
-        # used to keep track of the customers number of accounnts, and to 
+        # used to keep track of the customers number of accounnts, and to
         # assign each account a unique id
         self.numAccounts = 0
         self.accounts = {}
-        #currAccount stores the account the user has selected from which to
-        #deposit or withdraw
+        # currAccount stores the account the user has selected from which to
+        # deposit or withdraw
         self.currAccount = 0
 
     def listAccounts(self):
@@ -45,7 +47,7 @@ class Customer:
         accountView = "{0} : {1} ${2:.2f}"
         for product, accounts in self.accounts.items():
             accountList.append(accountView.format(product, accounts.product,
-                  accounts.balance))
+                                                  accounts.balance))
         return accountList
 
     def __str__(self):
@@ -56,7 +58,7 @@ class Customer:
 
 
 class Bank:
-    #Used to assign each customer a unique id
+    # Used to assign each customer a unique id
     clientId = 0
     """ the Bank has the ability to create accounts, create new clients """
     """ and list clients """
@@ -70,7 +72,7 @@ class Bank:
         # for the bank
         self.teller = Teller(self)
 
-    def newClient(self,name, age):
+    def newClient(self, name, age):
         """ This method recieves the age and name of the customer from the """
         """ teller and then uses that information plus the unique id to """
         """ create a client, it then sets the newClient as the tellers """
@@ -78,9 +80,9 @@ class Bank:
         newClient = Customer(name, age, self.clientId)
         self.clients.update({self.clientId: newClient})
         self.clientId += 1
-        #sets the client just created as the tellers current customer
+        # sets the client just created as the tellers current customer
         self.teller.currCustomer = newClient
-        #calls the tellers select product method
+        # calls the tellers select product method
         self.teller.selectProduct()
 
     def createAccount(self, product):
@@ -98,7 +100,7 @@ class Bank:
     def listClients(self):
         """ listClients appends each customers str method to a list which """
         """ is then returned to the teller """
-        customerList=[]
+        customerList = []
         for idNums, customer in self.clients.items():
             customerList.append(customer.__str__())
         return customerList
@@ -107,8 +109,8 @@ class Bank:
 class Teller:
     # used to print menu and product options
     productDict = {1: "Savings", 2: "Checkings", 3: "Retirement"}
-    actionList = ["A: Deposit", "B: Withdraw", "C: Create Account", \
-                  "D: List Accounts", "E: Main Menu" ]
+    actionList = ["A: Deposit", "B: Withdraw", "C: Create Account",
+                  "D: List Accounts", "E: Main Menu"]
 
     def __init__(self, bank):
         # again, the teller needs access to the banks methods in order to
@@ -136,7 +138,7 @@ class Teller:
         print("\tWelcome to the bank_of_nerds")
         userInput = self.valueValidation(self.__str__(), str)
         # The teller tries to perform the users request by getting the value
-        # of the key selected, if the value is not present, the teller 
+        # of the key selected, if the value is not present, the teller
         # will explain to them it is not available
         self.options.get(userInput.lower(), self.welcErr)()
 
@@ -147,7 +149,7 @@ class Teller:
         name = self.valueValidation("What is your name? ", str)
         age = self.valueValidation("What is your age? ", int)
         self.bank.newClient(name, age)
-        
+
     def selectProduct(self):
         """ select product lists the available products the bank has to """
         """ offer, and allows the user to select what they would like to """
@@ -155,13 +157,13 @@ class Teller:
         os.system("clear")
         print(self.currCustomer.__str__())
         for key, value in Teller.productDict.items():
-            print(key,":",value)
-        productKey = self.valueValidation("What kind of account "\
-                                "would you like to open? ", int)
+            print(key, ":", value)
+        productKey = self.valueValidation("What kind of account "
+                                          "would you like to open? ", int)
         # if the customer does not select an appropriate product they sent
         # back to the product listing and asked to choose again
         product = Teller.productDict.get(productKey, None)
-        if product == None:
+        if product is None:
             self.selectProduct()
         self.bank.createAccount(product)
 
@@ -176,10 +178,10 @@ class Teller:
         action = self.valueValidation("What would you like to do? ", str)
         os.system("clear")
         # if the users selectio is not present, the teller explains to them
-        # the action is not available and brings them back to available 
+        # the action is not available and brings them back to available
         # actions
         self.actions.get(action, self.actErr)()
-        
+
     def selectCustomer(self):
         """ selectCustomer wraps the banks list clients method. The """
         """ teller will check and make sure that the bank has clients """
@@ -192,10 +194,10 @@ class Teller:
             customerList = self.bank.listClients()
             for customer in customerList:
                 print(customer)
-            customerId = self.valueValidation("Which customer would you "\
-                                     "like to access? ", int)
+            customerId = self.valueValidation("Which customer would you "
+                                              "like to access? ", int)
         self.currCustomer = self.bank.clients.get(customerId, None)
-        if self.currCustomer == None:
+        if self.currCustomer is None:
             self.selectCustomer()
         os.system("clear")
         self.accountActions()
@@ -203,7 +205,7 @@ class Teller:
     def deposit(self):
         """ This method wraps the accounts deposit method """
         self.accountSelection()
-        deposit = self.valueValidation("How much would you"\
+        deposit = self.valueValidation("How much would you"
                                        " like to deposit? ", float)
         self.currCustomer.currAccount.deposit(deposit)
         os.system("clear")
@@ -212,13 +214,13 @@ class Teller:
     def withdraw(self):
         """ This method wraps the accounts withdraw method """
         self.accountSelection()
-        # error handling for retirement funds 
+        # error handling for retirement funds
         if self.currCustomer.currAccount.product == "Retirement" and\
                                                     self.currCustomer.age < 67:
             os.system("clear")
             print("You are not old enough to pull from your retirement")
             self.accountActions()
-        withdraw = self.valueValidation("How much would"\
+        withdraw = self.valueValidation("How much would"
                                         " you like to withdraw? ", float)
         # error handling for overdraft
         if (self.currCustomer.currAccount.balance - withdraw) < 0:
@@ -240,14 +242,13 @@ class Teller:
         accountList = self.currCustomer.listAccounts()
         for item in accountList:
             print(item)
-        account = self.valueValidation("Which account would"\
+        account = self.valueValidation("Which account would"
                                        " you like to choose? ", int)
-        self.currCustomer.currAccount = self.currCustomer.accounts.\
-                                        get(account, None)
-        if self.currCustomer.currAccount == None:
-            self.accountSelection()  
+        currAccount = self.currCustomer.accounts.get(account, None)
+        if currAccount is None:
+            self.accountSelection()
+        self.currCustomer.currAccount = currAccount
         return
-
 
     def goodBye(self):
         print("Thank you for banking with the bank_of_nerds")
@@ -291,7 +292,6 @@ class Teller:
                     print("Please enter a valid number")
                     continue
             return userInput
-        
 
     def __str__(self):
         menuOptions = "A: New Customers\nB: Existing Customers\nC: Exit\n"\
@@ -303,8 +303,6 @@ def main():
 
     bank = Bank()
     bank.teller.welcome()
-
-
 
 if __name__ == "__main__":
     main()
