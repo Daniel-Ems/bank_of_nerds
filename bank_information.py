@@ -2,7 +2,6 @@
 import os
 import time
 import sys
-from bank_teller import Teller
 
 
 class Account:
